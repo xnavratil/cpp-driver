@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1)
 project(cassandra C CXX)
 
 set(CASS_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -43,9 +43,11 @@ option(CASS_USE_KERBEROS "Use Kerberos" OFF)
 option(CASS_USE_LIBSSH2 "Use libssh2 for integration tests" OFF)
 option(CASS_USE_OPENSSL "Use OpenSSL" ON)
 option(CASS_USE_STATIC_LIBS "Link static libraries when building executables" OFF)
-option(CASS_USE_STD_ATOMIC "Use C++11 atomics library" OFF)
+option(CASS_USE_STD_ATOMIC "Use std::atomic library" ON)
 option(CASS_USE_ZLIB "Use zlib" ON)
 option(CASS_USE_TIMERFD "Use timerfd (Linux only)" ON)
+
+set(CASS_CPP_STANDARD "11" CACHE STRING "C++ standard (11, 14, 17, etc.)")
 
 # Handle testing dependencies
 if(CASS_BUILD_TESTS)
@@ -161,12 +163,10 @@ endif()
 # Top-level compiler flags
 #------------------------
 
+set (CMAKE_CXX_STANDARD ${CASS_CPP_STANDARD})
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
    "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  # Enable C++11 support to use std::atomic
-  if(CASS_USE_STD_ATOMIC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  endif()
 
   # OpenSSL is deprecated on later versions of Mac OS X. The long-term solution
   # is to provide a CommonCryto implementation.
