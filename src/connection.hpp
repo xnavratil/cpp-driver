@@ -14,14 +14,14 @@
   limitations under the License.
 */
 
+#ifndef DATASTAX_INTERNAL_CONNECTION_HPP
+#define DATASTAX_INTERNAL_CONNECTION_HPP
+
 #include "event_response.hpp"
 #include "request_callback.hpp"
 #include "socket.hpp"
 #include "stream_manager.hpp"
 #include "optional.hpp"
-
-#ifndef DATASTAX_INTERNAL_CONNECTION_HPP
-#define DATASTAX_INTERNAL_CONNECTION_HPP
 
 namespace datastax { namespace internal { namespace core {
 

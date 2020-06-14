@@ -14,13 +14,13 @@
   limitations under the License.
 */
 
+#ifndef DATASTAX_INTERNAL_CONNECTION_CONNECTOR_HPP
+#define DATASTAX_INTERNAL_CONNECTION_CONNECTOR_HPP
+
 #include "auth.hpp"
 #include "callback.hpp"
 #include "connection.hpp"
 #include "socket_connector.hpp"
-
-#ifndef DATASTAX_INTERNAL_CONNECTION_CONNECTOR_HPP
-#define DATASTAX_INTERNAL_CONNECTION_CONNECTOR_HPP
 
 namespace datastax { namespace internal { namespace core {
 
