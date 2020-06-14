@@ -92,3 +92,8 @@ bool ProtocolVersion::supports_result_metadata_id() const {
   assert(value_ > 0 && "Invalid protocol version");
   return is_protocol_at_least_v5_or_dse_v2(value_);
 }
+
+bool ProtocolVersion::supports_sharding() const {
+  assert(value_ > 0 && "Invalid protocol version");
+  return *this >= ProtocolVersion(CASS_PROTOCOL_VERSION_V4);
+}
