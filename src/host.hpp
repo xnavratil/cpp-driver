@@ -29,6 +29,8 @@
 #include "scoped_ptr.hpp"
 #include "spin_lock.hpp"
 #include "vector.hpp"
+#include "sharding_info.hpp"
+#include "optional.hpp"
 
 #include <math.h>
 #include <stdint.h>
@@ -124,6 +126,11 @@ public:
     dc_id_ = dc_id;
   }
 
+  CassOptional<ShardingInfo> sharding_info() const { return sharding_info_opt_; }
+  void set_sharding_info(ShardingInfo si) {
+    sharding_info_opt_ = std::move(si);
+  }
+
   const String& partitioner() const { return partitioner_; }
 
   const Vector<String>& tokens() const { return tokens_; }
@@ -212,6 +219,7 @@ private:
   Vector<String> tokens_;
   Atomic<int32_t> connection_count_;
   Atomic<int32_t> inflight_request_count_;
+  CassOptional<ShardingInfo> sharding_info_opt_;
 
   ScopedPtr<LatencyTracker> latency_tracker_;
 

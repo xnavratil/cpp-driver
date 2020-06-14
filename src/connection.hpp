@@ -18,6 +18,7 @@
 #include "request_callback.hpp"
 #include "socket.hpp"
 #include "stream_manager.hpp"
+#include "optional.hpp"
 
 #ifndef DATASTAX_INTERNAL_CONNECTION_HPP
 #define DATASTAX_INTERNAL_CONNECTION_HPP
@@ -195,6 +196,11 @@ public:
    */
   void set_listener(ConnectionListener* listener = NULL);
 
+  int32_t shard_id() const { return shard_id_; }
+  void set_shard_id(int32_t shard_id) {
+    shard_id_ = shard_id;
+  }
+
   /**
    * Start heartbeats to keep the connection alive and to detect a network or
    * server-side failure.
@@ -240,6 +246,8 @@ private:
 
   ProtocolVersion protocol_version_;
   String keyspace_;
+
+  int32_t shard_id_ = 0;
 
   unsigned int idle_timeout_secs_;
   unsigned int heartbeat_interval_secs_;
