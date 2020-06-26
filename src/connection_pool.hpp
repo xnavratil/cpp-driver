@@ -135,7 +135,7 @@ public:
    *
    * @return The least busy connection or null if no connection is available.
    */
-  PooledConnection::Ptr find_least_busy() const;
+  PooledConnection::Ptr find_least_busy(int64_t token) const;
 
   /**
    * Determine if the pool has any valid connections.

@@ -29,6 +29,7 @@
 #include "result_response.hpp"
 #include "row.hpp"
 #include "session.hpp"
+#include "token_map_impl.hpp"
 
 #include <uv.h>
 
@@ -357,8 +358,16 @@ void RequestHandler::internal_retry(RequestExecution* request_execution) {
 
   bool is_done = false;
   while (!is_done && request_execution->current_host()) {
+    int64_t token = CASS_INT64_MIN;
+    const RoutableRequest* routable_req = dynamic_cast<const RoutableRequest*>(request());
+    if (routable_req) {
+      String routing_key;
+      routable_req->get_routing_key(&routing_key);
+      token = Murmur3Partitioner::hash(routing_key);
+    }
+
     PooledConnection::Ptr connection =
-        manager_->find_least_busy(request_execution->current_host()->address());
+        manager_->find_least_busy(request_execution->current_host()->address(), token);
     if (connection) {
       int32_t result = connection->write(request_execution);
 

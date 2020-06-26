@@ -95,13 +95,25 @@ ConnectionPool::ConnectionPool(const Connection::Vec& connections, ConnectionPoo
   }
 }
 
-PooledConnection::Ptr ConnectionPool::find_least_busy() const {
-  PooledConnection::Vec::const_iterator it =
-      std::min_element(connections_.begin(), connections_.end(), least_busy_comp);
-  if (it == connections_.end() || (*it)->is_closing()) {
-    return PooledConnection::Ptr();
+PooledConnection::Ptr ConnectionPool::find_least_busy(int64_t token) const {
+  if (token == CASS_INT64_MIN) {
+    PooledConnection::Vec::const_iterator it =
+        std::min_element(connections_.begin(), connections_.end(), least_busy_comp);
+    if (it == connections_.end() || (*it)->is_closing()) {
+      return PooledConnection::Ptr();
+    }
+    return *it;
   }
-  return *it;
+
+  const auto desired_shard_num = host_->sharding_info()->shard_id(token);
+  const auto conn_it = std::find_if(connections_.begin(), connections_.end(), [desired_shard_num] (const PooledConnection::Ptr& c) {
+    return c->shard_id() == desired_shard_num;
+  });
+  if (conn_it != connections_.end()) {
+    return *conn_it;
+  }
+
+  return find_least_busy(CASS_INT64_MIN);
 }
 
 bool ConnectionPool::has_connections() const { return !connections_.empty(); }
