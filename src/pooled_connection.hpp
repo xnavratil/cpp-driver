@@ -79,6 +79,8 @@ public:
    */
   bool is_closing() const;
 
+  int32_t shard_id() const { return connection_->shard_id(); }
+
 public:
   const String& keyspace() const { return connection_->keyspace(); } // Test only
 

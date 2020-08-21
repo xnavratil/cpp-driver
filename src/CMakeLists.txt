@@ -36,6 +36,15 @@ else()
   endif()
 endif()
 
+# Determine `optional` library to include
+if(CMAKE_CXX_STANDARD LESS 17)
+  message(STATUS "Using akrzemi's `optional` implementation")
+  list(APPEND SOURCES optional/optional_akrzemi.hpp)
+else()
+  message(STATUS "Using std::optional library")
+  list(APPEND SOURCES optional/optional_std.hpp)
+endif()
+
 add_subdirectory(third_party/curl)
 add_subdirectory(third_party/hdr_histogram)
 add_subdirectory(third_party/http-parser)

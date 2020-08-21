@@ -62,12 +62,12 @@ ConnectionPoolManager::ConnectionPoolManager(const ConnectionPool::Map& pools, u
   }
 }
 
-PooledConnection::Ptr ConnectionPoolManager::find_least_busy(const Address& address) const {
+PooledConnection::Ptr ConnectionPoolManager::find_least_busy(const Address& address, int64_t token) const {
   ConnectionPool::Map::const_iterator it = pools_.find(address);
   if (it == pools_.end()) {
     return PooledConnection::Ptr();
   }
-  return it->second->find_least_busy();
+  return it->second->find_least_busy(token);
 }
 
 bool ConnectionPoolManager::has_connections(const Address& address) const {

@@ -282,6 +282,18 @@ void Connector::on_supported(ResponseMessage* response) {
   SupportedResponse* supported = static_cast<SupportedResponse*>(response->response_body().get());
   supported_options_ = supported->supported_options();
 
+  if (connection_->protocol_version().supports_sharding()) {
+    auto conn_sharding_info_opt = ShardingInfo::parse_sharding_info(supported_options_);
+    if (conn_sharding_info_opt) {
+      connection_->set_shard_id(conn_sharding_info_opt->shard_id);
+      connection_->host()->set_sharding_info(std::move(conn_sharding_info_opt->sharding_info));
+    } else {
+      LOG_ERROR("Could not retrieve sharding info from control connection to %s."
+                " Continuing WITHOUT SHARD-AWARENESS.",
+                connection_->address().to_string().c_str());
+    }
+  }
+
   connection_->write_and_flush(RequestCallback::Ptr(new StartupCallback(
       this, Request::ConstPtr(new StartupRequest(settings_.application_name,
                                                  settings_.application_version, settings_.client_id,

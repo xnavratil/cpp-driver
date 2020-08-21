@@ -135,7 +135,7 @@ public:
    *
    * @return The least busy connection or null if no connection is available.
    */
-  PooledConnection::Ptr find_least_busy() const;
+  PooledConnection::Ptr find_least_busy(int64_t token) const;
 
   /**
    * Determine if the pool has any valid connections.
@@ -213,6 +213,9 @@ private:
 private:
   void notify_up_or_down();
   void notify_critical_error(Connector::ConnectionError code, const String& message);
+
+  /** Adds connection to the pool. It's the caller's responsibility
+   *  to keep track of the connections count. */
   void add_connection(const PooledConnection::Ptr& connection);
   void schedule_reconnect(ReconnectionSchedule* schedule = NULL);
   void internal_close();
@@ -232,7 +235,8 @@ private:
 
   CloseState close_state_;
   NotifyState notify_state_;
-  PooledConnection::Vec connections_;
+  std::vector<PooledConnection::Vec> connections_by_shard_; /// Index is the shard ID
+  size_t num_connections_per_shard_;
   DelayedConnector::Vec pending_connections_;
   DenseHashSet<PooledConnection*> to_flush_;
 };

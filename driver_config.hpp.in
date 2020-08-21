@@ -4,6 +4,7 @@
 #cmakedefine HAVE_KERBEROS
 #cmakedefine HAVE_OPENSSL
 #cmakedefine HAVE_STD_ATOMIC
+#cmakedefine CASS_CPP_STANDARD @CASS_CPP_STANDARD@
 #cmakedefine HAVE_BOOST_ATOMIC
 #cmakedefine HAVE_NOSIGPIPE
 #cmakedefine HAVE_SIGTIMEDWAIT

@@ -131,6 +131,13 @@ public:
    */
   bool supports_result_metadata_id() const;
 
+  /**
+   * Scylla-specific: check to see if shard-awareness is supported by the current protocol version.
+   *
+   * @return true if supported, otherwise false.
+   */
+  bool supports_sharding() const;
+
 public:
   bool operator<(ProtocolVersion version) const { return value_ < version.value_; }
   bool operator>(ProtocolVersion version) const { return value_ > version.value_; }

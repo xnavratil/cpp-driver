@@ -84,7 +84,14 @@ public:
    * @return The least busy connection for a host or null if no connections are
    * available.
    */
-  PooledConnection::Ptr find_least_busy(const Address& address) const;
+  PooledConnection::Ptr find_least_busy(const Address& address, int64_t token) const;
+
+  /**
+   * Non-token-aware version of `find_least_busy()`, kept only for testing.
+   */
+  PooledConnection::Ptr find_least_busy(const Address& address) const {
+    return find_least_busy(address, CASS_INT64_MIN);
+  }
 
   /**
    * Determine if a pool has any valid connections.
