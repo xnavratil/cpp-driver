@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+// Copyright by ScyllaDB (c) 2020
 
 #ifdef _WIN32
 // Enable memory leak detection
@@ -300,6 +301,7 @@ bool CCM::Bridge::create_cluster(std::vector<unsigned short> data_center_nodes,
     // Create the cluster create command and execute
     std::vector<std::string> create_command;
     create_command.push_back("create");
+    create_command.push_back("--scylla");
     if (use_install_dir_ && !install_dir_.empty()) {
       create_command.push_back("--install-dir=" + install_dir_);
     } else {
@@ -1481,15 +1483,17 @@ CCM::Bridge::generate_create_updateconf_command(CassVersion cassandra_version) {
     }
   }
 
+  // Commented out for Scylla:
   // Create Cassandra version specific updated (C* 2.2+)
-  if (cassandra_version >= "2.2.0") {
-    updateconf_command.push_back("enable_user_defined_functions:true");
-  }
+  //if (cassandra_version >= "2.2.0") {
+  //  updateconf_command.push_back("experimental_features:udf");
+  //}
 
+  // Commented out for Scylla:
   // Create Cassandra version specific updated (C* 3.0+)
-  if (cassandra_version >= "3.0.0") {
-    updateconf_command.push_back("enable_scripted_user_defined_functions:true");
-  }
+  //if (cassandra_version >= "3.0.0") {
+  //  updateconf_command.push_back("enable_scripted_user_defined_functions:true");
+  //}
 
   return updateconf_command;
 }
