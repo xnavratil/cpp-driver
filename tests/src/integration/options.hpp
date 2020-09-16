@@ -234,6 +234,14 @@ public:
    */
   static bool is_beta_protocol();
   /**
+   * Flag to determine whether `--scylla` option should be passed to `ccm create`.
+   */
+  static bool is_scylla();
+  /**
+   * Requested number of shards per host, passed through JVM args in `ccm start`. Applies to Scylla.
+   */
+  static int smp();
+  /**
    * Get a CCM instance based on the options
    *
    * @return CCM instance
@@ -357,6 +365,14 @@ private:
    * NOTE: Individual tests can still override this.
    */
   static bool is_beta_protocol_;
+  /**
+   * Flag that passes `--scylla` to `ccm create` (or not). By default ON.
+   */
+  static bool is_scylla_;
+  /**
+   * Number of shards per host (applies to Scylla). By default 1.
+   */
+  static int smp_;
 
   /**
    * Hidden default constructor

@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 
 #define DEFAULT_OPTIONS_CASSSANDRA_VERSION CCM::CassVersion("3.11.6")
 #define DEFAULT_OPTIONS_DSE_VERSION CCM::DseVersion("6.7.7")
@@ -49,6 +50,8 @@ std::string Options::private_key_ = "private.key";
 bool Options::is_verbose_ccm_ = false;
 bool Options::is_verbose_integration_ = false;
 bool Options::is_beta_protocol_ = true;
+bool Options::is_scylla_ = true;
+int Options::smp_ = 1;
 
 // Static initialization is not guaranteed for the following types
 CCM::DseCredentialsType Options::dse_credentials_type_;
@@ -165,6 +168,26 @@ bool Options::initialize(int argc, char* argv[]) {
           }
         } else {
           std::cerr << "Missing Category: All applicable tests will run" << std::endl;
+        }
+      } else if (key == "--scylla") {
+        if (!value.empty()) {
+          is_scylla_ = bool_value(value);
+        } else {
+          // Just specifying the option is enough, as in scylla-ccm.
+          is_scylla_ = true;
+        }
+      } else if (key == "--smp") {
+        if (!value.empty()) {
+          std::istringstream iss(value);
+          int smp;
+          iss >> smp;
+          if (iss) {
+            smp_ = smp;
+          } else {
+            std::cerr << "Invalid value for `--smp`: " << value << ". Using default " << smp_ << std::endl;
+          }
+        } else {
+          std::cerr << "No value provided for `--smp`. Using default " << smp_ << std::endl;
         }
       } else if (key == "--verbose") {
         if (!value.empty() && !bool_value(value)) {
@@ -515,7 +538,8 @@ SharedPtr<CCM::Bridge, StdDeleter<CCM::Bridge> > Options::ccm() {
                          Options::dse_password(), Options::deployment_type(),
                          Options::authentication_type(), Options::host(), Options::port(),
                          Options::username(), Options::password(), Options::public_key(),
-                         Options::private_key(), Options::is_verbose_ccm());
+                         Options::private_key(), Options::is_verbose_ccm(),
+                         Options::is_scylla(), Options::smp());
 }
 
 bool Options::is_verbose_ccm() { return is_verbose_ccm_; }
@@ -523,6 +547,10 @@ bool Options::is_verbose_ccm() { return is_verbose_ccm_; }
 bool Options::is_verbose_integration() { return is_verbose_integration_; }
 
 bool Options::is_beta_protocol() { return is_beta_protocol_; }
+
+bool Options::is_scylla() { return is_scylla_; }
+
+int Options::smp() { return smp_; }
 
 Options::Options() {}
 

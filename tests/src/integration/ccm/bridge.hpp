@@ -53,6 +53,8 @@ typedef struct _LIBSSH2_CHANNEL LIBSSH2_CHANNEL;
 #define DEFAULT_REMOTE_DEPLOYMENT_USERNAME "vagrant"
 #define DEFAULT_REMOTE_DEPLOYMENT_PASSWORD "vagrant"
 #define DEFAULT_IS_VERBOSE false
+#define DEFAULT_IS_SCYLLA true
+#define DEFAULT_SMP 1
 #define DEFAULT_JVM_ARGUMENTS std::vector<std::string>()
 
 // Define the node limit for a cluster
@@ -197,7 +199,8 @@ public:
          const std::string& username = DEFAULT_REMOTE_DEPLOYMENT_USERNAME,
          const std::string& password = DEFAULT_REMOTE_DEPLOYMENT_PASSWORD,
          const std::string& public_key = "", const std::string& private_key = "",
-         bool is_verbose = DEFAULT_IS_VERBOSE);
+         bool is_verbose = DEFAULT_IS_VERBOSE, bool is_scylla = DEFAULT_IS_SCYLLA,
+         int smp = DEFAULT_SMP);
 
   /**
    * Destructor
@@ -795,6 +798,14 @@ private:
    * Flag to determine if verbose output is enabled
    */
   bool is_verbose_;
+  /**
+   * Flag to determine if `--scylla` is passed to `ccm create`
+   */
+  bool is_scylla_;
+  /**
+   * Number of shards per host, passed to `ccm start` as JVM args (applies to Scylla).
+   */
+  int smp_;
 
 #ifdef CASS_USE_LIBSSH2
   /**
