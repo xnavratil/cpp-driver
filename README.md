@@ -196,6 +196,24 @@ int main(int argc, char* argv[]) {
 }
 ```
 
+## Testing
+
+This project includes a number of unit tests and an integration test suite. To run the integration tests against Scylla some prerequisites must be met:
+
+* `scylla-ccm` cloned and installed system-wide
+* `scylla-jmx` cloned alongside `scylla-ccm` and built
+* `scylla-tools-java` cloned, built and symlinked from `[SCYLLA_ROOT]/resources/cassandra`
+
+Building the integration tests:
+```
+mkdir build && cd build
+cmake -DCASS_BUILD_INTEGRATION_TESTS=ON .. && make
+```
+Certain test cases require features that are unavailable in OSS Scylla, or fail for other reasons, and thus need to be disabled for now. Assuming that `scylla` is built in the release mode, the command line may look as below:
+```
+./cassandra-integration-tests --install-dir=[SCYLLA_ROOT] --version=3.0.8 --category=CASSANDRA --verbose=ccm --gtest_filter=-AuthenticationTests*:ConsistencyTwoNodeClusterTests.Integration_Cassandra_SimpleEachQuorum:ControlConnectionTests.Integration_Cassandra_TopologyChange:ControlConnectionTwoNodeClusterTests.Integration_Cassandra_Reconnection:CustomPayloadTests*:DbaasTests*:DcAwarePolicyTest.Integration_Cassandra_UsedHostsRemoteDc:ExecutionProfileTest.Integration_Cassandra_RequestTimeout:ExecutionProfileTest.Integration_Cassandra_SpeculativeExecutionPolicy:MetricsTests.Integration_Cassandra_SpeculativeExecutionRequests:PreparedTests.Integration_Cassandra_PreparedIDUnchangedDuringReprepare:ServerSideFailureTests.Integration_Cassandra_Warning:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionFailure:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionAlreadyExists:SessionTest.Integration_Cassandra_ExternalHostListener:SchemaMetadataTest*:SchemaNullStringApiArgsTest*:SpeculativeExecutionTests*:SslTests*:SslClientAuthenticationTests*
+```
+
 ## License
 
 &copy; DataStax, Inc.
@@ -210,6 +228,8 @@ Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
+
+Modified by ScyllaDB &copy; 2020
 
 [Apache Cassandra®]: http://cassandra.apache.org
 [DataStax Enterprise]: http://www.datastax.com/products/datastax-enterprise

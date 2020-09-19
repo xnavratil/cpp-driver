@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
+// Copyright by ScyllaDB (c) 2020
 
 #ifdef _WIN32
 // Enable memory leak detection
@@ -111,7 +112,8 @@ CCM::Bridge::Bridge(
     const std::string& host /*= DEFAULT_HOST*/, short port /*= DEFAULT_REMOTE_DEPLOYMENT_PORT*/,
     const std::string& username /*= DEFAULT_USERNAME*/,
     const std::string& password /*= DEFAULT_PASSWORD*/, const std::string& public_key /*= ""*/,
-    const std::string& private_key /*= ""*/, bool is_verbose /*= DEFAULT_IS_VERBOSE*/)
+    const std::string& private_key /*= ""*/, bool is_verbose /*= DEFAULT_IS_VERBOSE*/,
+    bool is_scylla /*= DEFAULT_IS_SCYLLA*/, int smp /*= DEFAULT_SMP*/)
     : cassandra_version_(server_version)
     , dse_version_(DEFAULT_DSE_VERSION)
     , use_git_(use_git)
@@ -136,7 +138,9 @@ CCM::Bridge::Bridge(
     , deployment_type_(DeploymentType::LOCAL)
     , host_("127.0.0.1")
 #endif
-    , is_verbose_(is_verbose) {
+    , is_verbose_(is_verbose)
+    , is_scylla_(is_scylla)
+    , smp_(smp) {
 #ifdef _WIN32
 #ifdef _DEBUG
   // Enable automatic execution of the memory leak detection upon exit
@@ -152,6 +156,10 @@ CCM::Bridge::Bridge(
   // Determine if installation directory can be used
   if (use_install_dir_ && install_dir_.empty()) {
     throw BridgeException("Directory must not be blank");
+  }
+
+  if (!is_scylla_ && smp_ != DEFAULT_SMP) {
+    throw BridgeException("Parameter SMP (# of shards) is applicable to Scylla only");
   }
 #ifdef CASS_USE_LIBSSH2
   // Determine if libssh2 needs to be initialized
@@ -300,6 +308,9 @@ bool CCM::Bridge::create_cluster(std::vector<unsigned short> data_center_nodes,
     // Create the cluster create command and execute
     std::vector<std::string> create_command;
     create_command.push_back("create");
+    if (is_scylla_) {
+      create_command.push_back("--scylla");
+    }
     if (use_install_dir_ && !install_dir_.empty()) {
       create_command.push_back("--install-dir=" + install_dir_);
     } else {
@@ -482,6 +493,12 @@ bool CCM::Bridge::start_cluster(
     }
   }
 #endif
+  if (is_scylla_ && smp_ != DEFAULT_SMP) {
+    jvm_arguments.push_back("--smp");
+    std::ostringstream oss;
+    oss << smp_;
+    jvm_arguments.push_back(oss.str());
+  }
   for (std::vector<std::string>::const_iterator iterator = jvm_arguments.begin();
        iterator != jvm_arguments.end(); ++iterator) {
     std::string jvm_argument = trim(*iterator);
@@ -1481,15 +1498,17 @@ CCM::Bridge::generate_create_updateconf_command(CassVersion cassandra_version) {
     }
   }
 
+  // Commented out for Scylla:
   // Create Cassandra version specific updated (C* 2.2+)
-  if (cassandra_version >= "2.2.0") {
-    updateconf_command.push_back("enable_user_defined_functions:true");
-  }
+  //if (cassandra_version >= "2.2.0") {
+  //  updateconf_command.push_back("experimental_features:udf");
+  //}
 
+  // Commented out for Scylla:
   // Create Cassandra version specific updated (C* 3.0+)
-  if (cassandra_version >= "3.0.0") {
-    updateconf_command.push_back("enable_scripted_user_defined_functions:true");
-  }
+  //if (cassandra_version >= "3.0.0") {
+  //  updateconf_command.push_back("enable_scripted_user_defined_functions:true");
+  //}
 
   return updateconf_command;
 }

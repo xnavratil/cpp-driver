@@ -156,7 +156,7 @@ void Integration::SetUp() {
           Options::dse_credentials(), Options::dse_username(), Options::dse_password(),
           Options::deployment_type(), Options::authentication_type(), Options::host(),
           Options::port(), Options::username(), Options::password(), Options::public_key(),
-          Options::private_key(), Options::is_verbose_ccm());
+          Options::private_key(), Options::is_verbose_ccm(), Options::is_scylla(), Options::smp());
       if (ccm_->create_cluster(data_center_nodes, is_with_vnodes_, is_password_authenticator_,
                                is_ssl_, is_client_authentication_)) {
         if (is_ccm_start_requested_) {
