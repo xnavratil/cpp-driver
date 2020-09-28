@@ -286,7 +286,7 @@ void Connector::on_supported(ResponseMessage* response) {
     auto conn_sharding_info_opt = ShardingInfo::parse_sharding_info(supported_options_);
     if (conn_sharding_info_opt) {
       connection_->set_shard_id(conn_sharding_info_opt->shard_id);
-      connection_->host()->set_sharding_info(std::move(conn_sharding_info_opt->sharding_info));
+      connection_->host()->set_sharding_info_if_unset(std::move(conn_sharding_info_opt->sharding_info));
     } else {
       LOG_ERROR("Could not retrieve sharding info from control connection to %s."
                 " Continuing WITHOUT SHARD-AWARENESS.",

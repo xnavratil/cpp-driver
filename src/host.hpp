@@ -26,6 +26,7 @@
 #include "macros.hpp"
 #include "map.hpp"
 #include "ref_counted.hpp"
+#include "scoped_lock.hpp"
 #include "scoped_ptr.hpp"
 #include "spin_lock.hpp"
 #include "vector.hpp"
@@ -91,7 +92,7 @@ private:
   int patch_version_;
 };
 
-class Host : public RefCounted<Host> {
+class Host final : public RefCounted<Host> {
 public:
   typedef SharedRefPtr<Host> Ptr;
   typedef SharedRefPtr<const Host> ConstPtr;
@@ -103,7 +104,13 @@ public:
       , dc_id_(0)
       , address_string_(address.to_string())
       , connection_count_(0)
-      , inflight_request_count_(0) {}
+      , inflight_request_count_(0) {
+    uv_mutex_init(&mutex_);
+  }
+
+  ~Host() {
+    uv_mutex_destroy(&mutex_);
+  }
 
   const Address& address() const { return address_; }
   const String& address_string() const { return address_string_; }
@@ -127,8 +134,11 @@ public:
   }
 
   CassOptional<ShardingInfo> sharding_info() const { return sharding_info_opt_; }
-  void set_sharding_info(ShardingInfo si) {
-    sharding_info_opt_ = std::move(si);
+  void set_sharding_info_if_unset(ShardingInfo si) {
+    ScopedMutex lock(&mutex_);
+    if (!sharding_info_opt_) {
+      sharding_info_opt_ = std::move(si);
+    }
   }
 
   const String& partitioner() const { return partitioner_; }
@@ -222,6 +232,8 @@ private:
   CassOptional<ShardingInfo> sharding_info_opt_;
 
   ScopedPtr<LatencyTracker> latency_tracker_;
+
+  uv_mutex_t mutex_;
 
 private:
   DISALLOW_COPY_AND_ASSIGN(Host);
