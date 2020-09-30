@@ -133,7 +133,12 @@ public:
     dc_id_ = dc_id;
   }
 
-  CassOptional<ShardingInfo> sharding_info() const { return sharding_info_opt_; }
+  CassOptional<ShardingInfo> sharding_info() {
+    ScopedMutex lock(&mutex_);
+    auto tmp = sharding_info_opt_;
+    return tmp;
+  }
+
   void set_sharding_info_if_unset(ShardingInfo si) {
     ScopedMutex lock(&mutex_);
     if (!sharding_info_opt_) {
