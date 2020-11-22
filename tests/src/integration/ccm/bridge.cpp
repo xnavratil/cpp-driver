@@ -311,8 +311,24 @@ bool CCM::Bridge::create_cluster(std::vector<unsigned short> data_center_nodes,
     if (is_scylla_) {
       create_command.push_back("--scylla");
     }
+
+    // Reading the scylla relocatable version of of environment variable
+    char const* _scylla_version = std::getenv("SCYLLA_VERSION");
+    std::string scylla_version = _scylla_version == NULL ? std::string() : std::string(_scylla_version);
+
+    // Adding those to the create command, so we can skip the populate command line
+    // (we don't support it very well in scylla-ccm)
+    std::string cluster_nodes = generate_cluster_nodes(data_center_nodes);
+    std::string cluster_ip_prefix = get_ip_prefix();
+    create_command.push_back("-n");
+    create_command.push_back(cluster_nodes);
+    create_command.push_back("-i");
+    create_command.push_back(cluster_ip_prefix);
+
     if (use_install_dir_ && !install_dir_.empty()) {
       create_command.push_back("--install-dir=" + install_dir_);
+    } else if (!scylla_version.empty()) {
+      create_command.push_back("--version="+scylla_version);
     } else {
       create_command.push_back("-v");
       if (is_cassandra()) {
@@ -383,20 +399,6 @@ bool CCM::Bridge::create_cluster(std::vector<unsigned short> data_center_nodes,
     if (is_dse() && dse_version_ >= "6.7.0") {
       update_cluster_configuration("user_defined_function_fail_micros", "5000000");
     }
-
-    // Create the cluster populate command and execute
-    std::string cluster_nodes = generate_cluster_nodes(data_center_nodes);
-    std::string cluster_ip_prefix = get_ip_prefix();
-    std::vector<std::string> populate_command;
-    populate_command.push_back("populate");
-    populate_command.push_back("-n");
-    populate_command.push_back(cluster_nodes);
-    populate_command.push_back("-i");
-    populate_command.push_back(cluster_ip_prefix);
-    if (with_vnodes) {
-      populate_command.push_back("--vnodes");
-    }
-    execute_ccm_command(populate_command);
 
     // Update the cluster configuration (set num_tokens)
     if (with_vnodes) {
