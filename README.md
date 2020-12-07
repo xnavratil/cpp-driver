@@ -1,20 +1,13 @@
-:warning: **The C/C++ driver is in maintenance mode. We are still accepting pull-requests and we will occasionally release critical bug fixes, but no ongoing active development is being done currently.**
+# C/C++ Driver for ScyllaDB
 
-# DataStax C/C++ Driver for Apache Cassandra® and DataStax Products
-
-A modern, feature-rich and highly tunable C/C++ client library for
-[Apache Cassandra®] 2.1+ using exclusively Cassandra's binary protocol and
-Cassandra Query Language v3. This driver can also be used with other DataStax
-products:
-
-* [DataStax Enterprise]
-* [DataStax Constellation]
+A modern, feature-rich and **shard-aware** C/C++ client library for
+[ScyllaDB] using exclusively Cassandra's binary protocol and
+Cassandra Query Language v3. Forked from Datastax `cpp-driver`.
 
 ## Getting the Driver
 
-Binary versions of the driver, available for multiple operating systems and
-multiple architectures, can be obtained from our [download server]. The
-source code is made available via [GitHub].
+**Releases are coming soon.** For beta-testing we recommend to build the driver
+from sources.
 
 Packages for the driver's dependencies, libuv (1.x), OpenSSL, and zlib are also
 provided under the `dependencies` directory for each platform (if applicable).
@@ -28,24 +21,6 @@ distribution:
 * [Ubuntu 16.04][ubuntu-16-04-dependencies]
 * [Ubuntu 18.04][ubuntu-18-04-dependencies]
 * [Windows][windows-dependencies]
-
-## Upgrading
-
-Starting with DataStax C/C++ driver for Apache Cassandra® v2.15.0, DataStax
-Enterprise (DSE) support is now available; using the DSE driver exclusively is no
-longer required for DSE customers.
-
-### For DSE driver users
-
-Linking changes will be required when migrating to this driver. Replace `-ldse` with `-lcassandra`.
-
-### For Cassandra driver users
-
-No changes will be required when upgrading to this driver. There will be new
-driver dependencies when using any of the binary versions obtained from our
-[download server] as [Kerberos] is utilized in the [DSE features] of this
-driver. See the [installation] section for more information on obtaining the
-dependencies for a specific platform.
 
 ## Features
 
@@ -107,13 +82,8 @@ __Disclaimer__: DataStax products do not support big-endian systems.
 
 ## Getting Help
 
-* JIRA: https://datastax-oss.atlassian.net/browse/CPP
-* Mailing List: https://groups.google.com/a/lists.datastax.com/forum/#!forum/cpp-driver-user
-
-## Feedback Requested
-
-**Help us focus our efforts!** [Provide your input] on the C/C++ Driver Platform
-and Runtime Survey (we kept it short).
+* Slack: http://slack.scylladb.com/
+* `Issues` section of this repository
 
 ## Examples
 
@@ -211,7 +181,7 @@ cmake -DCASS_BUILD_INTEGRATION_TESTS=ON .. && make
 ```
 Certain test cases require features that are unavailable in OSS Scylla, or fail for other reasons, and thus need to be disabled for now. Assuming that `scylla` is built in the release mode, the command line may look as below:
 ```
-./cassandra-integration-tests --install-dir=[SCYLLA_ROOT] --version=3.0.8 --category=CASSANDRA --verbose=ccm --gtest_filter=-AuthenticationTests*:ConsistencyTwoNodeClusterTests.Integration_Cassandra_SimpleEachQuorum:ControlConnectionTests.Integration_Cassandra_TopologyChange:ControlConnectionTwoNodeClusterTests.Integration_Cassandra_Reconnection:CustomPayloadTests*:DbaasTests*:DcAwarePolicyTest.Integration_Cassandra_UsedHostsRemoteDc:ExecutionProfileTest.Integration_Cassandra_RequestTimeout:ExecutionProfileTest.Integration_Cassandra_SpeculativeExecutionPolicy:MetricsTests.Integration_Cassandra_SpeculativeExecutionRequests:PreparedTests.Integration_Cassandra_PreparedIDUnchangedDuringReprepare:ServerSideFailureTests.Integration_Cassandra_Warning:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionFailure:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionAlreadyExists:SessionTest.Integration_Cassandra_ExternalHostListener:SchemaMetadataTest*:SchemaNullStringApiArgsTest*:SpeculativeExecutionTests*:SslTests*:SslClientAuthenticationTests*
+./cassandra-integration-tests --install-dir=[SCYLLA_ROOT] --version=3.0.8 --category=CASSANDRA --verbose=ccm --gtest_filter=-AuthenticationTests*:ConsistencyTwoNodeClusterTests.Integration_Cassandra_SimpleEachQuorum:ControlConnectionTests.Integration_Cassandra_TopologyChange:ControlConnectionTwoNodeClusterTests.Integration_Cassandra_Reconnection:CustomPayloadTests*:DbaasTests*:DcAwarePolicyTest.Integration_Cassandra_UsedHostsRemoteDc:ExecutionProfileTest.Integration_Cassandra_RequestTimeout:ExecutionProfileTest.Integration_Cassandra_SpeculativeExecutionPolicy:MetricsTests.Integration_Cassandra_SpeculativeExecutionRequests:MetricsTests.Integration_Cassandra_StatsConnections:PreparedTests.Integration_Cassandra_PreparedIDUnchangedDuringReprepare:ServerSideFailureTests.Integration_Cassandra_Warning:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionFailure:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionAlreadyExists:SessionTest.Integration_Cassandra_ExternalHostListener:SchemaMetadataTest*:SchemaNullStringApiArgsTest*:SpeculativeExecutionTests*:SslTests*:SslClientAuthenticationTests*
 ```
 
 ## License
@@ -231,15 +201,14 @@ specific language governing permissions and limitations under the License.
 
 Modified by ScyllaDB &copy; 2020
 
-[Apache Cassandra®]: http://cassandra.apache.org
+[ScyllaDB]: http://scylladb.com
 [DataStax Enterprise]: http://www.datastax.com/products/datastax-enterprise
 [Examples]: examples/
-[download server]: http://downloads.datastax.com/cpp-driver/
-[GitHub]: https://github.com/datastax/cpp-driver
+[GitHub]: https://github.com/scylladb/cpp-driver
 [cpp-driver-compatability-matrix]: https://docs.datastax.com/en/developer/driver-matrix/doc/cppDrivers.html#cpp-drivers
 [Home]: http://docs.datastax.com/en/developer/cpp-driver/latest
 [API]: http://docs.datastax.com/en/developer/cpp-driver/latest/api
-[Getting Started]: http://docs.datastax.com/en/developer/cpp-driver/latest/topics
+[Getting Started]: https://university.scylladb.com/courses/using-scylla-drivers/lessons/cpp-driver-part-1/
 [Building]: http://docs.datastax.com/en/developer/cpp-driver/latest/topics/building
 [Provide your input]: http://goo.gl/forms/ihKC5uEQr6
 [centos-6-dependencies]: http://downloads.datastax.com/cpp-driver/centos/6/dependencies
