@@ -11299,6 +11299,15 @@ cass_log_set_callback(CassLogCallback callback,
                       void* data);
 
 /**
+ * Analogous getter - useful for restoring logger to previous values.
+ * 
+ * @param[out] callback_out Current logging callback. Must point to a valid memory area.
+ * @param[out] data_out Current Logger instance. Must point to a valid memory area.
+ */
+CASS_EXPORT void
+cass_log_get_callback_and_data(CassLogCallback* callback_out, void** data_out);
+
+/**
  * Sets the log queue size.
  *
  * <b>Note:</b> This needs to be done before any call that might log, such as

@@ -30,6 +30,10 @@ void cass_log_set_callback(CassLogCallback callback, void* data) {
   Logger::set_callback(callback, data);
 }
 
+void cass_log_get_callback_and_data(CassLogCallback* callback_out, void** data_out) {
+  Logger::get_callback_and_data(callback_out, data_out);
+}
+
 void cass_log_set_queue_size(size_t queue_size) {
   // Deprecated
 }
@@ -65,4 +69,9 @@ void Logger::set_log_level(CassLogLevel log_level) { log_level_ = log_level; }
 void Logger::set_callback(CassLogCallback cb, void* data) {
   cb_ = cb == NULL ? noop_log_callback : cb;
   data_ = data;
+}
+
+void Logger::get_callback_and_data(CassLogCallback* cb_out, void** data_out) {
+  *cb_out = cb_;
+  *data_out = data_;
 }

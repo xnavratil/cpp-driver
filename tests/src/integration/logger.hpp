@@ -97,6 +97,11 @@ private:
    * Number of log messages that match the search criteria
    */
   size_t count_;
+  
+  /** We need these to restore the globals on teardown. */
+  bool restore_old_logger_ = false;
+  CassLogCallback old_log_callback_;
+  void* old_data_;
 
   /**
    * Log the message from the driver (callback)
