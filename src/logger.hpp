@@ -31,6 +31,7 @@ class Logger {
 public:
   static void set_log_level(CassLogLevel level);
   static void set_callback(CassLogCallback cb, void* data);
+  static void get_callback_and_data(CassLogCallback* cb_out, void** data_out);
 
 #if defined(__GNUC__) || defined(__clang__)
 #define ATTR_FORMAT(string, first) __attribute__((__format__(__printf__, string, first)))

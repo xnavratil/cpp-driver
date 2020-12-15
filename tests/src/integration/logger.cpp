@@ -44,6 +44,10 @@ Logger::~Logger() {
   if (output_.is_open()) {
     output_.close();
   }
+  if (restore_old_logger_) {
+    // `initialize` has beed called, so let's restore global logger
+    cass_log_set_callback(old_log_callback_, old_data_);
+  }
 }
 
 void Logger::initialize(const std::string& test_case, const std::string& test_name) {
@@ -72,6 +76,10 @@ void Logger::initialize(const std::string& test_case, const std::string& test_na
 
   // Set the maximum driver log level to capture all logs messages
   cass_log_set_level(CASS_LOG_TRACE);
+
+  // Remember the old logger before setting it (to be restored in dtor)
+  cass_log_get_callback_and_data(&old_log_callback_, &old_data_);
+  restore_old_logger_ = true;
   cass_log_set_callback(Logger::log, this);
 }
 
