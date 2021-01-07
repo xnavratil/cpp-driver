@@ -5,7 +5,7 @@
 *.0
 
 # Compiled Dynamic libraries
-libcassandra.so*
+libscylla-cpp-driver.so*
 *.dylib
 
 # Compiled Static libraries

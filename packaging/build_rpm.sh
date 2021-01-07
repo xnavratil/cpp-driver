@@ -40,7 +40,7 @@ if [[ ! -z $1 ]]; then
 fi
 
 version=$(header_version "../include/cassandra.h")
-base="cassandra-cpp-driver-$version"
+base="scylla-cpp-driver-$version"
 archive="$base.tar.gz"
 files="CMakeLists.txt cmake cmake_uninstall.cmake.in driver_config.hpp.in include src README.md LICENSE.txt"
 
@@ -69,8 +69,8 @@ echo "Copying files"
 for file in $files; do
   cp -r  "../$file" "build/SOURCES/$base"
 done
-cp cassandra.pc.in build/SOURCES
-cp cassandra_static.pc.in build/SOURCES
+cp scylla-cpp-driver.pc.in build/SOURCES
+cp scylla-cpp-driver_static.pc.in build/SOURCES
 
 echo "Archiving $archive"
 pushd "build/SOURCES"
@@ -78,6 +78,6 @@ tar zcf $archive $base
 popd
 
 echo "Building package:"
-rpmbuild --target $arch --define "_topdir ${PWD}/build" --define "driver_version $version" --define "libuv_version $libuv_version" -ba cassandra-cpp-driver.spec
+rpmbuild --target $arch --define "_topdir ${PWD}/build" --define "driver_version $version" --define "libuv_version $libuv_version" -ba scylla-cpp-driver.spec
 
 exit 0

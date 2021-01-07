@@ -136,39 +136,39 @@ configure_file(
 #------------------------------
 
 if(CASS_BUILD_SHARED)
-  add_library(cassandra SHARED 
+  add_library(scylla-cpp-driver SHARED 
     ${SOURCES}
     $<TARGET_OBJECTS:curl_hostcheck>
     $<TARGET_OBJECTS:hdr_histogram>
     $<TARGET_OBJECTS:http-parser>
     $<TARGET_OBJECTS:minizip>)
-  target_link_libraries(cassandra ${CASS_LIBS})
-  target_include_directories(cassandra PRIVATE ${INCLUDE_DIRS} ${CASS_INCLUDES})
+  target_link_libraries(scylla-cpp-driver ${CASS_LIBS})
+  target_include_directories(scylla-cpp-driver PRIVATE ${INCLUDE_DIRS} ${CASS_INCLUDES})
 
-  set_target_properties(cassandra PROPERTIES OUTPUT_NAME cassandra)
-  set_target_properties(cassandra PROPERTIES VERSION ${PROJECT_VERSION_STRING} SOVERSION ${PROJECT_VERSION_MAJOR})
-  set_target_properties(cassandra PROPERTIES
-      COMPILE_PDB_NAME "cassandra"
+  set_target_properties(scylla-cpp-driver PROPERTIES OUTPUT_NAME scylla-cpp-driver)
+  set_target_properties(scylla-cpp-driver PROPERTIES VERSION ${PROJECT_VERSION_STRING} SOVERSION ${PROJECT_VERSION_MAJOR})
+  set_target_properties(scylla-cpp-driver PROPERTIES
+      COMPILE_PDB_NAME "scylla-cpp-driver"
       COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-  set_target_properties(cassandra PROPERTIES
+  set_target_properties(scylla-cpp-driver PROPERTIES
       ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
       LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
       RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-  set_target_properties(cassandra PROPERTIES FOLDER "Driver")
+  set_target_properties(scylla-cpp-driver PROPERTIES FOLDER "Driver")
 
-  target_compile_definitions(cassandra PRIVATE CASS_BUILDING)
+  target_compile_definitions(scylla-cpp-driver PRIVATE CASS_BUILDING)
 
   if(CASS_USE_BOOST_ATOMIC AND BOOST_LIBRARY_NAME)
-    add_dependencies(cassandra ${BOOST_LIBRARY_NAME})
+    add_dependencies(scylla-cpp-driver ${BOOST_LIBRARY_NAME})
   endif()
   if(LIBUV_LIBRARY_NAME)
-    add_dependencies(cassandra ${LIBUV_LIBRARY_NAME})
+    add_dependencies(scylla-cpp-driver ${LIBUV_LIBRARY_NAME})
   endif()
   if(OPENSSL_LIBRARY_NAME)
-    add_dependencies(cassandra ${OPENSSL_LIBRARY_NAME})
+    add_dependencies(scylla-cpp-driver ${OPENSSL_LIBRARY_NAME})
   endif()
   if(ZLIB_LIBRARY_NAME)
-    add_dependencies(cassandra ${ZLIB_LIBRARY_NAME})
+    add_dependencies(scylla-cpp-driver ${ZLIB_LIBRARY_NAME})
   endif()
 endif()
 
@@ -182,7 +182,7 @@ if(CASS_BUILD_STATIC)
   target_link_libraries(cassandra_static ${CASS_LIBS})
   target_include_directories(cassandra_static PRIVATE ${INCLUDE_DIRS} ${CASS_INCLUDES})
 
-  set_target_properties(cassandra_static PROPERTIES OUTPUT_NAME cassandra_static)
+  set_target_properties(cassandra_static PROPERTIES OUTPUT_NAME scylla-cpp-driver_static)
   set_target_properties(cassandra_static PROPERTIES VERSION ${PROJECT_VERSION_STRING} SOVERSION ${PROJECT_VERSION_MAJOR})
   set_target_properties(cassandra_static PROPERTIES
       COMPILE_PDB_NAME "cassandra_static"
@@ -270,21 +270,21 @@ endif()
 
 # Install the dynamic/shared library
 if(CASS_BUILD_SHARED)
-  install(TARGETS cassandra
+  install(TARGETS scylla-cpp-driver
     RUNTIME DESTINATION ${INSTALL_DLL_EXE_DIR}  # for dll/executable/pdb files
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}  # for shared library
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}) # for static library
   if(CASS_INSTALL_PKG_CONFIG)
     if(NOT WIN32)
       if(PKG_CONFIG_FOUND)
-        configure_file("${PROJECT_SOURCE_DIR}/packaging/cassandra.pc.in" "cassandra.pc" @ONLY)
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/cassandra.pc"
+        configure_file("${PROJECT_SOURCE_DIR}/packaging/scylla-cpp-driver.pc.in" "scylla-cpp-driver.pc" @ONLY)
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/scylla-cpp-driver.pc"
           DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
       endif()
     endif()
   endif()
   if(WIN32)
-    install(FILES $<TARGET_PDB_FILE:cassandra>
+    install(FILES $<TARGET_PDB_FILE:scylla-cpp-driver>
       DESTINATION "${INSTALL_DLL_EXE_DIR}"
       OPTIONAL)
   endif()
@@ -298,8 +298,8 @@ if(CASS_BUILD_STATIC)
   if(CASS_INSTALL_PKG_CONFIG)
     if(NOT WIN32)
       if(PKG_CONFIG_FOUND)
-        configure_file("${PROJECT_SOURCE_DIR}/packaging/cassandra_static.pc.in" "cassandra_static.pc" @ONLY)
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/cassandra_static.pc"
+        configure_file("${PROJECT_SOURCE_DIR}/packaging/scylla-cpp-driver_static.pc.in" "scylla-cpp-driver_static.pc" @ONLY)
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/scylla-cpp-driver_static.pc"
           DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
       endif()
     endif()
