@@ -19,3 +19,13 @@ cat licenses/* > LICENSE.txt
 cd packaging/
 ./build_rpm.sh
 ```
+
+## On a clean Ubuntu 18
+
+```
+sudo apt-get update
+sudo apt-get install -y libuv1-dev openssl cmake make g++ git devscripts debhelper dh-exec libssl-dev zlib1g-dev
+git clone https://github.com/scylladb/cpp-driver.git
+cd cpp-driver/packaging
+./build_deb.sh
+```
