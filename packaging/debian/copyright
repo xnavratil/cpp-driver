@@ -1,10 +1,11 @@
 Format: http://dep.debian.net/deps/dep5
-Upstream-Name: cassandra-cpp-driver
-Source: https://github.com/datastax/cpp-driver
+Upstream-Name: scylla-cpp-driver
+Source: https://github.com/scylladb/cpp-driver
 
 Files: *
 Copyright: Copyright (c) DataStax, Inc.
-License: Apache-2.0
+ Copyright (c) 2020 ScyllaDB
+License: Apache-2.0, AGPL-3
   On Debian systems, the complete text of the Apache License Version 2.0
   can be found in `/usr/share/common-licenses/Apache-2.0'.
 
@@ -25,3 +26,7 @@ License: MIT
 Files: src/third_party/curl/*
 Copyright: Copyright (C) 1998 - 2012, Daniel Stenberg, <daniel@haxx.se>, et al.
 License: MIT
+
+Files: src/optional/optional_akrzemi.hpp
+Copyright: Copyright (C) 2011 - 2012 Andrzej Krzemienski
+License: Boost Software License 1.0

@@ -37,7 +37,7 @@ check_command "lsb_release" "lsb-release"
 version=$(header_version "../include/cassandra.h")
 release=1
 dist=$(lsb_release -s -c)
-base="cassandra-cpp-driver-$version"
+base="scylla-cpp-driver-$version"
 archive="$base.tar.gz"
 files="CMakeLists.txt cmake cmake_uninstall.cmake.in driver_config.hpp.in include src"
 

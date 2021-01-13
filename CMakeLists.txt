@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(cassandra C CXX)
+project(scylla-cpp C CXX)
 
 set(CASS_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(CASS_SRC_DIR "${CASS_ROOT_DIR}/src")
@@ -62,12 +62,12 @@ if(CASS_BUILD_INTEGRATION_TESTS OR CASS_BUILD_UNIT_TESTS)
 endif()
 
 # Determine which driver target should be used as a dependency
-set(PROJECT_LIB_NAME_TARGET cassandra)
+set(PROJECT_LIB_NAME_TARGET scylla-cpp-driver)
 if(CASS_USE_STATIC_LIBS OR
    (WIN32 AND (CASS_BUILD_INTEGRATION_TESTS OR CASS_BUILD_UNIT_TESTS)))
   set(CASS_USE_STATIC_LIBS ON) # Not all driver internals are exported for test executable (e.g. CASS_EXPORT)
   set(CASS_BUILD_STATIC ON)
-  set(PROJECT_LIB_NAME_TARGET cassandra_static)
+  set(PROJECT_LIB_NAME_TARGET scylla-cpp-driver_static)
 endif()
 
 # Ensure the driver is configured to build
