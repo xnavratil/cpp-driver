@@ -22,7 +22,6 @@ cmake_*.cmake
 CMakeFiles
 CMakeCache.txt
 CMakeScripts
-Makefile
 install_manifest.txt
 
 # library files
@@ -54,8 +53,11 @@ src/driver_config.hpp
 
 # API docs files
 Doxyfile
-docs
-
+docs/_build
+docs/source/.doctrees
+docs/_source
+docs/poetry.lock
+doxygen
 # editor
 *.swp
 *~
