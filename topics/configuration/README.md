@@ -456,3 +456,11 @@ expensive or long-running future callbacks are used (via
 [token-aware]: http://datastax.github.io/cpp-driver/topics/configuration/#latency-aware-routing
 [latency-aware]: http://datastax.github.io/cpp-driver/topics/configuration/#token-aware-routing
 [paging]: http://datastax.github.io/cpp-driver/topics/basics/handling_results/#paging
+
+```eval_rst
+.. toctree::
+  :hidden:
+  :glob:
+   
+  retry_policies/*
+```

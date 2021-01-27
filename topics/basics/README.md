@@ -107,3 +107,23 @@
   </tbody>
 </table>
 
+```eval_rst
+.. toctree::
+  :hidden:
+  :glob:
+  
+  batches/*
+  binding_parameters/*
+  client_side_timestamps/*
+  consistency/*
+  data_types/*
+  date_and_time/*
+  futures/*
+  handling_results/*
+  keyspaces/*
+  prepared_statements/*
+  schema_metadata/*
+  tuples/*
+  user_defined_types/*
+  uuids/*
+```

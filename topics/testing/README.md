@@ -117,3 +117,11 @@ Here are some of the items being scheduled for future enhancements.
  - Allow files to be copied over SSH established connection
 
 [build procedures]: http://datastax.github.io/cpp-driver/topics/building/#test-dependencies-and-building-tests-not-required
+
+```eval_rst
+.. toctree::
+  :hidden:
+  :glob:
+  
+  ccm/*
+```

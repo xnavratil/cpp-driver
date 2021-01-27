@@ -1,8 +1,10 @@
-# Getting Started
+# Features
 
-## Installation
+## Getting Started
 
-### Driver
+### Installation
+
+#### Driver
 
 Packages are available for the following platforms:
 
@@ -14,7 +16,7 @@ Packages are available for the following platforms:
 * [Ubuntu 18.04 LTS][cpp-driver-ubuntu18-04]
 * [Windows][cpp-driver-windows]
 
-### Dependencies
+#### Dependencies
 
 Packages for the dependencies, libuv (1.x), OpenSSL, and zlib are also provided
 and can be found under the "dependencies" directory for each platform:
@@ -32,7 +34,7 @@ distribution.
 
 The driver can also be [built from source].
 
-## Connecting
+### Connecting
 
 ```c
 #include <cassandra.h>
@@ -80,7 +82,7 @@ automatically discover the rest of the nodes in your cluster.
 **Perfomance Tip:** Include more than one contact point to be robust against
 node failures.
 
-## Futures
+### Futures
 
 The driver is designed so that no operation will force an application to block.
 Operations that would normally cause the application to block, such as
@@ -90,7 +92,7 @@ object that can be waited on, polled, or used to register a callback.
 **NOTE:** The API can also be used synchronously by waiting on or immediately
 attempting to get the result from a future.
 
-## Executing Queries
+### Executing Queries
 
 Queries are executed using [`CassStatement`] objects. Statements encapsulate
 the query string and the query parameters. Query parameters are not supported
@@ -117,7 +119,7 @@ void execute_query(CassSession* session) {
 }
 ```
 
-## Parameterized Queries (Positional)
+### Parameterized Queries (Positional)
 
 Cassandra 2.0+ supports the use of parameterized queries. This allows the same
 query string to be executed multiple times with different values; avoiding
@@ -150,7 +152,7 @@ void execute_paramertized_query(CassSession* session) {
 }
 ```
 
-## Handling Query Results
+### Handling Query Results
 
 A single row can be retrieved using the convenience function
 [`cass_result_first_row()`] to get the first row. A [`CassIterator`] object may
@@ -192,9 +194,9 @@ void handle_query_result(CassFuture* future) {
 }
 ```
 
-# Architecture
+## Architecture
 
-## Cluster
+### Cluster
 
 The [`CassCluster`] object describes a Cassandra cluster’s configuration. The
 default cluster object is good for most clusters and only requires a single or
@@ -203,7 +205,7 @@ Once a session is connected using a cluster object its configuration is
 constant. Modifying the cluster object configuration once a session is
 established does not alter the session's configuration.
 
-## Session
+### Session
 
 The [`CassSession`] object is used for query execution. Internally, a session
 object also manages a pool of client connections to Cassandra and uses a load
@@ -218,7 +220,7 @@ defaults to one per CPU core, but it can be configured using
 session with more I/O threads than multiple sessions with a smaller number of
 I/O threads. More DataStax driver best practices can be found in this [post].
 
-## Asynchronous I/O
+### Asynchronous I/O
 
 Each I/O thread maintains a small number of connections for each node in the
 Cassandra cluster and each of those connections can handle several simultaneous
@@ -228,7 +230,7 @@ concurrently. This significantly reduces the number of connections required to
 be open to Cassandra and allows the driver to batch requests destined for the
 same node.
 
-## Thread safety
+### Thread safety
 
 A [`CassSession`] is designed to be used concurrently from multiple threads.
 [`CassFuture`] is also thread safe. Other than these exclusions, in general,
@@ -239,7 +241,7 @@ that are immutable (marked 'const') can be read safely by multiple threads.
 `cass_session_free`, ... `cass_*_free`) cannot be called concurrently on the
 same instance of an object.
 
-## Memory handling
+### Memory handling
 
 Values such as strings (`const char*`), bytes and decimals
 (`const cass_bytes_t*`) point to memory held by the result object. The
@@ -286,3 +288,24 @@ with other drivers. The schedule for these features can be found on [JIRA].
 [`CassSession`]: http://datastax.github.io/cpp-driver/api/struct.CassSession/
 [post]: http://www.datastax.com/dev/blog/4-simple-rules-when-using-the-datastax-drivers-for-cassandra
 [JIRA]: https://datastax-oss.atlassian.net/browse/CPP
+
+```eval_rst
+.. toctree::
+  :hidden:
+  :glob:
+
+
+  basics/*
+  building/*
+  client_configuration/*
+  cloud/*
+  configuration/*
+  execution_profiles/*
+  faq/*
+  installation/*
+  logging/*
+  metrics/*
+  security/*
+  testing/*
+  tracing/*
+```
