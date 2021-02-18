@@ -6,21 +6,12 @@ Cassandra Query Language v3. Forked from Datastax `cpp-driver`.
 
 ## Getting the Driver
 
-**Releases are coming soon.** For beta-testing we recommend to build the driver
-from sources.
+Currently we support CentOS 7, Ubuntu 18.04 and their relatives. On these
+platforms [Installation] from packages is recommended. For other systems
+(or hacking) we recommend to build the driver from sources.
 
-Packages for the driver's dependencies, libuv (1.x), OpenSSL, and zlib are also
-provided under the `dependencies` directory for each platform (if applicable).
-__Note__: CentOS and Ubuntu use the version of OpenSSL and zlib provided with the
-distribution:
-
-* [CentOS 6][centos-6-dependencies]
-* [CentOS 7][centos-7-dependencies]
-* [CentOS 8][centos-8-dependencies]
-* [Ubuntu 14.04][ubuntu-14-04-dependencies]
-* [Ubuntu 16.04][ubuntu-16-04-dependencies]
-* [Ubuntu 18.04][ubuntu-18-04-dependencies]
-* [Windows][windows-dependencies]
+Our releases use the versions of libuv, OpenSSL and zlib provided with the
+distribution/EPEL.
 
 ## Features
 * [Shard-Awareness]
@@ -49,29 +40,18 @@ distribution:
 * [Reverse DNS] with SSL peer identity verification support
 * Randomized contact points
 * [Speculative execution]
-* DSE Features
-  * [DSE authentication]
-    * Plaintext/DSE
-    * LDAP
-    * GSSAPI (Kerberos)
-  * [DSE geospatial types]
-  * DSE [proxy authentication][DSE Proxy Authentication] and [proxy execution][DSE Proxy Execution]
-  * [DSE DateRange]
-* Support for [DataStax Constellation] Cloud Data Platform
 
 ## Compatibility
 
 This driver works exclusively with the Cassandra Query Language v3 (CQL3) and
 Cassandra's native protocol. The current version works with:
 
+* Scylla and Scylla Enterprise
 * Apache Cassandra® versions 2.1, 2.2 and 3.0+
 * Architectures: 32-bit (x86) and 64-bit (x64)
-* Compilers: GCC 4.1.2+, Clang 3.4+, and MSVC 2010/2012/2013/2015/2017/2019
+* C++-11-conforming compilers
 
-A complete compatibility matrix for both Apache Cassandra®
-and DataStax Enterprise can be found [here][cpp-driver-compatability-matrix].
-
-__Disclaimer__: DataStax products do not support big-endian systems.
+__Disclaimer__: cpp-driver does not support big-endian platforms.
 
 ## Documentation
 
@@ -92,7 +72,6 @@ The driver includes several examples in the [examples] directory.
 ## A Simple Example
 ```c
 #include <cassandra.h>
-/* Use "#include <dse.h>" when connecting to DataStax Enterpise */
 #include <stdio.h>
 
 int main(int argc, char* argv[]) {
@@ -205,20 +184,12 @@ Modified by ScyllaDB &copy; 2020
 [DataStax Enterprise]: http://www.datastax.com/products/datastax-enterprise
 [Examples]: examples/
 [GitHub]: https://github.com/scylladb/cpp-driver
-[cpp-driver-compatability-matrix]: https://docs.datastax.com/en/developer/driver-matrix/doc/cppDrivers.html#cpp-drivers
 [Home]: http://docs.datastax.com/en/developer/cpp-driver/latest
 [API]: http://docs.datastax.com/en/developer/cpp-driver/latest/api
 [Getting Started]: https://university.scylladb.com/courses/using-scylla-drivers/lessons/cpp-driver-part-1/
 [Building]: http://docs.datastax.com/en/developer/cpp-driver/latest/topics/building
 [Provide your input]: http://goo.gl/forms/ihKC5uEQr6
-[centos-6-dependencies]: http://downloads.datastax.com/cpp-driver/centos/6/dependencies
-[centos-7-dependencies]: http://downloads.datastax.com/cpp-driver/centos/7/dependencies
-[centos-8-dependencies]: http://downloads.datastax.com/cpp-driver/centos/8/dependencies
-[ubuntu-14-04-dependencies]: http://downloads.datastax.com/cpp-driver/ubuntu/14.04/dependencies
-[ubuntu-16-04-dependencies]: http://downloads.datastax.com/cpp-driver/ubuntu/16.04/dependencies
-[ubuntu-18-04-dependencies]: http://downloads.datastax.com/cpp-driver/ubuntu/18.04/dependencies
-[windows-dependencies]: http://downloads.datastax.com/cpp-driver/windows/dependencies
-[DataStax Constellation]: https://constellation.datastax.com
+[Installation]:topics/index.html#installation
 [Kerberos]: https://web.mit.edu/kerberos
 
 [Shard-Awareness]:topics/scylla_specific/index.html
@@ -246,9 +217,3 @@ Modified by ScyllaDB &copy; 2020
 [Custom]: http://datastax.github.io/cpp-driver/topics/security/#custom
 [Reverse DNS]: http://datastax.github.io/cpp-driver/topics/security/ssl/#enabling-cassandra-identity-verification
 [Speculative execution]: http://datastax.github.io/cpp-driver/topics/configuration/#speculative-execution
-[DSE authentication]: http://docs.datastax.com/en/developer/cpp-driver/latest/dse_features/authentication
-[DSE geospatial types]: http://docs.datastax.com/en/developer/cpp-driver/latest/dse_features/geotypes
-[DSE Proxy Authentication]: http://docs.datastax.com/en/developer/cpp-driver/latest/dse_features/authentication/#proxy-authentication
-[DSE Proxy Execution]: http://docs.datastax.com/en/developer/cpp-driver/latest/dse_features/authentication/#proxy-execution
-[DSE DateRange]: https://github.com/datastax/cpp-driver/blob/master/examples/dse/date_range/date_range.c
-[DSE features]: http://docs.datastax.com/en/developer/cpp-driver/latest/dse_features
