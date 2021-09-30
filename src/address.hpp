@@ -20,6 +20,7 @@
 #include "allocated.hpp"
 #include "callback.hpp"
 #include "dense_hash_set.hpp"
+#include "external.hpp"
 #include "string.hpp"
 #include "vector.hpp"
 
@@ -168,5 +169,7 @@ inline std::ostream& operator<<(std::ostream& os, const datastax::internal::core
 }
 
 } // namespace std
+
+EXTERNAL_TYPE(datastax::internal::core::Address, CassNode)
 
 #endif

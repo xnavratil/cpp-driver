@@ -161,7 +161,7 @@ Building the integration tests:
 mkdir build && cd build
 cmake -DCASS_BUILD_INTEGRATION_TESTS=ON .. && make
 ```
-Certain test cases require features that are unavailable in OSS Scylla, or fail for other reasons, and thus need to be disabled for now. Assuming that `scylla` is built in the release mode, the command line may look as below:
+Certain test cases require features that are unavailable in OSS Scylla, or fail for other non-critical reasons, and thus need to be disabled for now. Assuming that `scylla` is built in the release mode, the command line may look as below:
 ```
 ./cassandra-integration-tests --install-dir=[SCYLLA_ROOT] --version=3.0.8 --category=CASSANDRA --verbose=ccm --gtest_filter=-AuthenticationTests*:ConsistencyTwoNodeClusterTests.Integration_Cassandra_SimpleEachQuorum:ControlConnectionTests.Integration_Cassandra_TopologyChange:ControlConnectionTwoNodeClusterTests.Integration_Cassandra_Reconnection:CustomPayloadTests*:DbaasTests*:DcAwarePolicyTest.Integration_Cassandra_UsedHostsRemoteDc:ExecutionProfileTest.Integration_Cassandra_RequestTimeout:ExecutionProfileTest.Integration_Cassandra_SpeculativeExecutionPolicy:MetricsTests.Integration_Cassandra_SpeculativeExecutionRequests:MetricsTests.Integration_Cassandra_StatsConnections:PreparedTests.Integration_Cassandra_PreparedIDUnchangedDuringReprepare:ServerSideFailureTests.Integration_Cassandra_Warning:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionFailure:ServerSideFailureTests.Integration_Cassandra_ErrorFunctionAlreadyExists:SessionTest.Integration_Cassandra_ExternalHostListener:SchemaMetadataTest*:SchemaNullStringApiArgsTest*:SpeculativeExecutionTests*:SslTests*:SslClientAuthenticationTests*
 ```
@@ -191,7 +191,6 @@ Modified by ScyllaDB &copy; 2020
 [API]: http://docs.datastax.com/en/developer/cpp-driver/latest/api
 [Getting Started]: https://university.scylladb.com/courses/using-scylla-drivers/lessons/cpp-driver-part-1/
 [Building]: http://docs.datastax.com/en/developer/cpp-driver/latest/topics/building
-[Provide your input]: http://goo.gl/forms/ihKC5uEQr6
 [Installation]: topics/
 [Kerberos]: https://web.mit.edu/kerberos
 
