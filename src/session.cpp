@@ -169,6 +169,16 @@ void cass_session_get_speculative_execution_metrics(const CassSession* session,
 
 CassUuid cass_session_get_client_id(CassSession* session) { return session->client_id(); }
 
+cass_uint64_t cass_session_get_inflight_request_count(const CassSession* session) {
+  cass_uint64_t inflight_request_count = 0;
+  const HostMap hosts = session->cluster()->available_hosts();
+  for (HostMap::const_iterator it = hosts.begin(), end = hosts.end(); it != end; ++it) {
+    const Host::Ptr& host = it->second;
+    inflight_request_count += host->inflight_request_count();
+  }
+  return inflight_request_count;
+}
+
 } // extern "C"
 
 static inline bool least_busy_comp(const RequestProcessor::Ptr& a, const RequestProcessor::Ptr& b) {
@@ -195,13 +205,14 @@ public:
   SessionInitializer() { uv_mutex_destroy(&mutex_); }
 
   void initialize(const Host::Ptr& connected_host, ProtocolVersion protocol_version,
-                  const HostMap& hosts, const TokenMap::Ptr& token_map, const String& local_dc) {
+                  const HostMap& hosts, const TokenMap::Ptr& token_map, const String& local_dc,
+		  const String& local_rack) {
     inc_ref();
 
     const size_t thread_count_io = remaining_ = session_->config().thread_count_io();
     for (size_t i = 0; i < thread_count_io; ++i) {
       RequestProcessorInitializer::Ptr initializer(new RequestProcessorInitializer(
-          connected_host, protocol_version, hosts, token_map, local_dc,
+          connected_host, protocol_version, hosts, token_map, local_dc, local_rack,
           bind_callback(&SessionInitializer::on_initialize, this)));
 
       RequestProcessorSettings settings(session_->config());
@@ -359,7 +370,7 @@ void Session::join() {
 
 void Session::on_connect(const Host::Ptr& connected_host, ProtocolVersion protocol_version,
                          const HostMap& hosts, const TokenMap::Ptr& token_map,
-                         const String& local_dc) {
+                         const String& local_dc, const String& local_rack) {
   int rc = 0;
 
   if (hosts.empty()) {
@@ -393,7 +404,7 @@ void Session::on_connect(const Host::Ptr& connected_host, ProtocolVersion protoc
   request_processor_count_ = 0;
   is_closing_ = false;
   SessionInitializer::Ptr initializer(new SessionInitializer(this));
-  initializer->initialize(connected_host, protocol_version, hosts, token_map, local_dc);
+  initializer->initialize(connected_host, protocol_version, hosts, token_map, local_dc, local_rack);
 }
 
 void Session::on_close() {

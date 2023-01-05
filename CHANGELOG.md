@@ -1,3 +1,12 @@
+2.16.2-kiwicom1
+===========
+
+Features
+--------
+
+* Add rack-aware load balancing policy.
+* Expose getter for in-flight requests.
+
 2.16.2
 ===========
 
